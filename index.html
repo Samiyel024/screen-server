@@ -18,314 +18,65 @@
             --primary-hover: #1d4ed8;
             --success: #10b981;
             --danger: #ef4444;
-            --danger-hover: #dc2626;
             --radius: 12px;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-body); color: var(--text-main); font-family: 'Inter', sans-serif; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 
-        body {
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-        }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 16px 32px; background-color: var(--bg-card); border-bottom: 1px solid var(--border-color); z-index: 10; }
+        .brand { font-size: 20px; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 10px; }
+        .brand i { color: var(--primary); font-size: 24px; }
 
-        /* Top Navigation Bar */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 32px;
-            background-color: var(--bg-card);
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-            z-index: 10;
-        }
+        .status-container { display: flex; align-items: center; gap: 16px; font-size: 14px; font-weight: 500; padding: 8px 16px; background: #f1f5f9; border-radius: 30px; border: 1px solid var(--border-color); }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background-color: var(--danger); transition: all 0.3s ease; }
+        .dot.connected { background-color: var(--success); box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); }
 
-        .brand {
-            font-size: 20px;
-            font-weight: 700;
-            color: #0f172a;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .main-container { display: flex; flex: 1; padding: 24px; gap: 24px; max-width: 1600px; margin: 0 auto; width: 100%; }
 
-        .brand i {
-            color: var(--primary);
-            font-size: 24px;
-        }
+        .screen-wrapper { flex: 3; background-color: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border-color); box-shadow: var(--shadow); display: flex; flex-direction: column; overflow: hidden; }
+        .video-header { padding: 16px 24px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: #0f172a; }
+        .video-container { flex: 1; display: flex; justify-content: center; align-items: center; background-color: #e2e8f0; background-image: radial-gradient(#cbd5e1 1px, transparent 0); background-size: 20px 20px; position: relative; overflow: hidden; }
+        
+        /* 🔥 WebRTC Video Tag */
+        #remoteVideo { max-width: 100%; max-height: 100%; object-fit: contain; display: none; background: #000; }
 
-        .status-container {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            font-size: 14px;
-            font-weight: 500;
-            padding: 8px 16px;
-            background: #f1f5f9;
-            border-radius: 30px;
-            border: 1px solid var(--border-color);
-        }
+        .waiting-text { display: flex; flex-direction: column; align-items: center; gap: 12px; color: var(--text-muted); font-size: 16px; font-weight: 500; }
+        .waiting-text i { font-size: 32px; color: #94a3b8; }
 
-        .status-indicator {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .controls { padding: 20px 24px; background-color: var(--bg-card); border-top: 1px solid var(--border-color); display: flex; justify-content: center; gap: 16px; }
+        .btn { padding: 10px 20px; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; border: 1px solid transparent; }
+        .btn-primary { background-color: var(--primary); color: white; }
+        .btn-danger { background-color: white; color: var(--danger); border-color: var(--danger); }
+        .btn-secondary { background-color: white; color: var(--text-main); border-color: var(--border-color); }
 
-        .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: var(--danger);
-            transition: all 0.3s ease;
-        }
+        .sidebar { flex: 1; min-width: 320px; display: flex; flex-direction: column; gap: 24px; }
+        .panel { background-color: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border-color); box-shadow: var(--shadow); display: flex; flex-direction: column; overflow: hidden; }
+        .panel-header { padding: 16px 20px; border-bottom: 1px solid var(--border-color); font-weight: 600; color: #0f172a; background-color: #f8fafc; }
+        .panel-body { padding: 20px; flex: 1; display: flex; flex-direction: column; gap: 15px;}
+        
+        .config-group label { display: block; margin-bottom: 8px; color: var(--text-main); font-size: 13px; font-weight: 500; }
+        .config-group input { width: 100%; background: #ffffff; border: 1px solid #cbd5e1; padding: 10px 14px; border-radius: 8px; font-size: 14px; outline: none; }
+        .config-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
 
-        .dot.connected {
-            background-color: var(--success);
-            box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
-        }
-
-        /* Main Workspace */
-        .main-container {
-            display: flex;
-            flex: 1;
-            padding: 24px;
-            gap: 24px;
-            max-width: 1600px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        /* Left: Screen View Area */
-        .screen-wrapper {
-            flex: 3;
-            background-color: var(--bg-card);
-            border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .video-header {
-            padding: 16px 24px;
-            border-bottom: 1px solid var(--border-color);
-            font-weight: 600;
-            color: #0f172a;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .video-container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #e2e8f0; /* Light gray background for screen area */
-            background-image: radial-gradient(#cbd5e1 1px, transparent 0);
-            background-size: 20px 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        #screenStream {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            display: none;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border-radius: 4px;
-        }
-
-        .waiting-text {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            color: var(--text-muted);
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-        .waiting-text i {
-            font-size: 32px;
-            color: #94a3b8;
-        }
-
-        /* Controls Section */
-        .controls {
-            padding: 20px 24px;
-            background-color: var(--bg-card);
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border: 1px solid transparent;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .btn-danger {
-            background-color: white;
-            color: var(--danger);
-            border-color: var(--danger);
-        }
-
-        .btn-danger:hover {
-            background-color: #fef2f2;
-        }
-
-        .btn-secondary {
-            background-color: white;
-            color: var(--text-main);
-            border-color: var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            background-color: #f8fafc;
-        }
-
-        /* Right: Sidebar */
-        .sidebar {
-            flex: 1;
-            min-width: 320px;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        .panel {
-            background-color: var(--bg-card);
-            border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .panel-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border-color);
-            font-weight: 600;
-            color: #0f172a;
-            background-color: #f8fafc;
-        }
-
-        .panel-body {
-            padding: 20px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Config Form */
-        .config-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-main);
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .config-group input {
-            width: 100%;
-            background: #ffffff;
-            border: 1px solid #cbd5e1;
-            color: var(--text-main);
-            padding: 10px 14px;
-            border-radius: 8px;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .config-group input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        /* Clean Logs (No Hacker Terminal) */
-        .log-container {
-            flex: 1;
-            overflow-y: auto;
-            max-height: 400px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .log-entry {
-            display: flex;
-            gap: 12px;
-            font-size: 13px;
-            padding: 10px 12px;
-            background: #f8fafc;
-            border-radius: 6px;
-            border-left: 3px solid #cbd5e1;
-        }
-
+        .log-container { flex: 1; overflow-y: auto; max-height: 400px; display: flex; flex-direction: column; gap: 12px; }
+        .log-entry { display: flex; gap: 12px; font-size: 13px; padding: 10px 12px; background: #f8fafc; border-radius: 6px; border-left: 3px solid #cbd5e1; }
         .log-entry.info { border-left-color: var(--primary); }
         .log-entry.warn { border-left-color: #f59e0b; background: #fffbeb; }
         .log-entry.error { border-left-color: var(--danger); background: #fef2f2; color: #991b1b; }
-
-        .log-time {
-            color: var(--text-muted);
-            font-weight: 500;
-            font-size: 12px;
-            white-space: nowrap;
-        }
-        
-        .log-message {
-            flex: 1;
-            word-wrap: break-word;
-        }
-
+        .log-time { color: var(--text-muted); font-weight: 500; font-size: 12px; white-space: nowrap; }
+        .log-message { flex: 1; word-wrap: break-word; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="brand">
-            <i class="fa-solid fa-shield-halved"></i>
-            Device Management Console
+            <i class="fa-solid fa-shield-halved"></i> Device Management Console
         </div>
         <div class="status-container">
-            <span>Live Screen Status</span>
+            <span>WebRTC Stream</span>
             <div class="status-indicator">
                 <div class="dot" id="statusDot"></div>
                 <span id="statusText" style="color: var(--text-muted);">Disconnected</span>
@@ -335,19 +86,16 @@
 
     <div class="main-container">
         <div class="screen-wrapper">
-            <div class="video-header">
-                <span><i class="fa-solid fa-display" style="margin-right: 8px;"></i> Display Mirroring</span>
-            </div>
+            <div class="video-header"><span><i class="fa-solid fa-display" style="margin-right: 8px;"></i> Display Mirroring</span></div>
             <div class="video-container" id="videoContainer">
                 <div class="waiting-text" id="waitingText">
-                    <i class="fa-solid fa-satellite-dish"></i>
-                    Awaiting Connection...
+                    <i class="fa-solid fa-satellite-dish"></i> Awaiting WebRTC Connection...
                 </div>
-                <img id="screenStream" alt="Live Device Screen" />
+                <video id="remoteVideo" autoplay playsinline></video>
             </div>
             <div class="controls">
                 <button class="btn btn-primary" id="btnConnect" onclick="toggleConnection()">
-                    <i class="fa-solid fa-link"></i> Connect Device
+                    <i class="fa-solid fa-link"></i> Connect Target
                 </button>
                 <button class="btn btn-secondary" onclick="toggleFullscreen()">
                     <i class="fa-solid fa-expand"></i> Fullscreen
@@ -363,7 +111,11 @@
                 <div class="panel-header">Connection Settings</div>
                 <div class="panel-body">
                     <div class="config-group">
-                        <label>Relay Server (WSS URL)</label>
+                        <label>Target Device ID (Room ID)</label>
+                        <input type="text" id="targetId" placeholder="Enter Android ID / Room ID" value="">
+                    </div>
+                    <div class="config-group">
+                        <label>Signaling Server (WSS URL)</label>
                         <input type="text" id="wsUrl" value="wss://live-screen-server.onrender.com" placeholder="wss://...">
                     </div>
                 </div>
@@ -377,8 +129,7 @@
                     </button>
                 </div>
                 <div class="panel-body">
-                    <div class="log-container" id="terminal">
-                        </div>
+                    <div class="log-container" id="terminal"></div>
                 </div>
             </div>
         </div>
@@ -386,134 +137,161 @@
 
     <script>
         let ws = null;
+        let pc = null; // Peer Connection for WebRTC
         let isConnected = false;
         
         const terminal = document.getElementById('terminal');
+        const remoteVideo = document.getElementById('remoteVideo');
+        const waitingText = document.getElementById('waitingText');
         const statusDot = document.getElementById('statusDot');
         const statusText = document.getElementById('statusText');
         const btnConnect = document.getElementById('btnConnect');
         const btnStop = document.getElementById('btnStop');
-        const screenStream = document.getElementById('screenStream');
-        const waitingText = document.getElementById('waitingText');
 
         function log(message, type = 'info') {
             const now = new Date();
-            const timeStr = now.getHours().toString().padStart(2, '0') + ':' + 
-                            now.getMinutes().toString().padStart(2, '0') + ':' + 
-                            now.getSeconds().toString().padStart(2, '0');
-            
+            const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0') + ':' + now.getSeconds().toString().padStart(2, '0');
             const div = document.createElement('div');
             div.className = `log-entry ${type}`;
-            
-            div.innerHTML = `
-                <div class="log-time">${timeStr}</div>
-                <div class="log-message">${message}</div>
-            `;
+            div.innerHTML = `<div class="log-time">${timeStr}</div><div class="log-message">${message}</div>`;
             terminal.appendChild(div);
             terminal.scrollTop = terminal.scrollHeight;
         }
 
-        function clearLogs() {
-            terminal.innerHTML = '';
-            log('Event logs cleared.', 'info');
-        }
+        function clearLogs() { terminal.innerHTML = ''; }
 
         function updateStatus(connected) {
             isConnected = connected;
             if (connected) {
                 statusDot.classList.add('connected');
-                statusText.innerText = 'Active Session';
+                statusText.innerText = 'Connected to Signaling';
                 statusText.style.color = 'var(--success)';
                 btnConnect.innerHTML = '<i class="fa-solid fa-unlink"></i> Disconnect';
-                btnConnect.classList.remove('btn-primary');
-                btnConnect.classList.add('btn-danger');
-                
+                btnConnect.classList.replace('btn-primary', 'btn-danger');
                 btnStop.style.display = 'flex';
             } else {
                 statusDot.classList.remove('connected');
                 statusText.innerText = 'Disconnected';
                 statusText.style.color = 'var(--text-muted)';
-                btnConnect.innerHTML = '<i class="fa-solid fa-link"></i> Connect Device';
-                btnConnect.classList.remove('btn-danger');
-                btnConnect.classList.add('btn-primary');
-                
+                btnConnect.innerHTML = '<i class="fa-solid fa-link"></i> Connect Target';
+                btnConnect.classList.replace('btn-danger', 'btn-primary');
                 btnStop.style.display = 'none';
                 
-                screenStream.style.display = 'none';
+                remoteVideo.style.display = 'none';
+                remoteVideo.srcObject = null;
                 waitingText.style.display = 'flex';
+                
+                if (pc) { pc.close(); pc = null; }
             }
         }
 
         function toggleConnection() {
             if (isConnected) {
                 if (ws) ws.close();
-                log('Disconnected from relay server.', 'warn');
             } else {
                 connectWebSocket();
             }
         }
 
+        // 🔥 WEBRTC LOGIC INTEGRATED
         function connectWebSocket() {
             const url = document.getElementById('wsUrl').value;
-            if (!url) {
-                log('Please enter a valid WebSocket URL.', 'error');
+            const roomId = document.getElementById('targetId').value.trim();
+            
+            if (!roomId) {
+                log('Please enter a Target Device ID (Room ID).', 'error');
                 return;
             }
 
-            log(`Initializing connection to relay server...`, 'info');
+            log(`Connecting to signaling server...`, 'info');
             btnConnect.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Connecting...';
 
-            try {
-                ws = new WebSocket(url);
+            ws = new WebSocket(url);
 
-                ws.onopen = () => {
-                    log('Connection established. Waiting for device stream.', 'info');
-                    updateStatus(true);
-                };
+            ws.onopen = () => {
+                log('Connected to server. Joining room...', 'info');
+                ws.send(JSON.stringify({ type: "join", roomId: roomId }));
+                updateStatus(true);
+            };
 
-                ws.onmessage = (event) => {
-                    if (typeof event.data === 'string') {
-                        waitingText.style.display = 'none';
-                        screenStream.style.display = 'block';
-                        screenStream.src = "data:image/jpeg;base64," + event.data;
-                    } else {
-                        waitingText.style.display = 'none';
-                        screenStream.style.display = 'block';
-                        
-                        const urlCreator = window.URL || window.webkitURL;
-                        const imageUrl = urlCreator.createObjectURL(event.data);
-                        screenStream.src = imageUrl;
-                        
-                        screenStream.onload = () => {
-                            urlCreator.revokeObjectURL(imageUrl);
-                        };
+            ws.onmessage = async (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    
+                    if (data.type === "offer") {
+                        log('Received Video Offer from Target.', 'info');
+                        await handleOffer(data.sdp, roomId);
+                    } else if (data.type === "candidate") {
+                        if (pc) {
+                            await pc.addIceCandidate(new RTCIceCandidate({
+                                candidate: data.candidate,
+                                sdpMid: data.id,
+                                sdpMLineIndex: data.label
+                            }));
+                        }
+                    } else if (data.type === "stop_stream") {
+                        log('Target stopped the stream.', 'warn');
+                        remoteVideo.style.display = 'none';
+                        remoteVideo.srcObject = null;
+                        waitingText.style.display = 'flex';
                     }
-                };
+                } catch (e) {
+                    console.error(e);
+                }
+            };
 
-                ws.onclose = () => {
-                    log('Session ended. Connection closed.', 'warn');
-                    updateStatus(false);
-                    ws = null;
-                };
-
-                ws.onerror = (error) => {
-                    log('Connection error. Verify if the relay server is running.', 'error');
-                    updateStatus(false);
-                };
-
-            } catch (err) {
-                log(`Failed to connect: ${err.message}`, 'error');
+            ws.onclose = () => {
+                log('Connection to server lost.', 'warn');
                 updateStatus(false);
-            }
+            };
+        }
+
+        async function handleOffer(sdp, roomId) {
+            const config = { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] };
+            pc = new RTCPeerConnection(config);
+
+            // Jab video aani shuru ho jaye
+            pc.ontrack = (event) => {
+                remoteVideo.srcObject = event.streams[0];
+                waitingText.style.display = 'none';
+                remoteVideo.style.display = 'block';
+                log('Live Stream Started!', 'success');
+            };
+
+            // Ice candidate forward karna
+            pc.onicecandidate = (event) => {
+                if (event.candidate && ws) {
+                    ws.send(JSON.stringify({
+                        type: "candidate",
+                        roomId: roomId,
+                        candidate: event.candidate.candidate,
+                        id: event.candidate.sdpMid,
+                        label: event.candidate.sdpMLineIndex
+                    }));
+                }
+            };
+
+            await pc.setRemoteDescription(new RTCSessionDescription({ type: "offer", sdp: sdp }));
+            const answer = await pc.createAnswer();
+            await pc.setLocalDescription(answer);
+
+            // Target ko answer bhej do
+            ws.send(JSON.stringify({
+                type: "answer",
+                roomId: roomId,
+                sdp: answer.sdp
+            }));
         }
 
         function stopScreen() {
             if (ws && isConnected) {
-                const command = JSON.stringify({ action: "stop_screen" });
-                ws.send(command);
-                log('Stop command sent to the device.', 'info');
-            } else {
-                log('Command failed. No active connection.', 'error');
+                const roomId = document.getElementById('targetId').value.trim();
+                ws.send(JSON.stringify({ type: "stop_stream", roomId: roomId }));
+                log('Stop command sent.', 'info');
+                
+                remoteVideo.style.display = 'none';
+                remoteVideo.srcObject = null;
+                waitingText.style.display = 'flex';
             }
         }
 
@@ -521,16 +299,10 @@
             const container = document.getElementById('videoContainer');
             if (!document.fullscreenElement) {
                 if (container.requestFullscreen) container.requestFullscreen();
-                else if (container.webkitRequestFullscreen) container.webkitRequestFullscreen();
-                else if (container.msRequestFullscreen) container.msRequestFullscreen();
-                log('Entered fullscreen view.', 'info');
             } else {
                 if (document.exitFullscreen) document.exitFullscreen();
-                log('Exited fullscreen view.', 'info');
             }
         }
-
-        log('Console initialized. Ready for connection.', 'info');
     </script>
 </body>
 </html>
